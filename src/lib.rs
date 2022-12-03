@@ -139,7 +139,7 @@ fn filter_impurities(list: &mut Vec<WINRECT>) {
 pub fn get_desktop_window_info() -> JsDesktopWindowInfo {
   unsafe {
     let mut list: Vec<WINRECT> = vec![];
-    enum_window_hierarchy(GetForegroundWindow(), false, &mut list);
+    enum_window_hierarchy(GetWindow(GetForegroundWindow(), 2), false, &mut list);
     enum_window_hierarchy(GetWindow(GetForegroundWindow(), 3), true, &mut list);
     println!("前：{:?}", list);
     filter_impurities(&mut list);
