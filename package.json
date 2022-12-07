@@ -1,6 +1,6 @@
 {
   "name": "desktop-info",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "main": "index.js",
   "types": "index.d.ts",
   "napi": {
@@ -18,7 +18,7 @@
   },
   "scripts": {
     "build": "napi build --platform --release --js ./build/release/index.js --dts ./build/release/index.d.ts && node ./scripts/build.js build",
-    "build:debug": "napi build --platform --js ./build/dev/index.js --dts ./build/dev/index.d.ts && node ./scripts/build.js build:debug",
+    "build:debug": "napi build --platform",
     "test": "jest",
     "version": "napi version"
   },

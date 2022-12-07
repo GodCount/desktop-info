@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const nodeFilename = process.platform == "win32" ? "desktop-info.win32-x64-msvc.node" : "";
+const nodeFilename = process.platform == "win32" ? "desktop-info.win32-x64-msvc.node" : "desktop-info.darwin-x64.node";
 
 main();
 function main() {
