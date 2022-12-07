@@ -1,3 +1,8 @@
+const platform = process.platform;
+let nativeBinding;
+let loadError;
+
+
 switch (platform) {
   case "win32":
     try {
