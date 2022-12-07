@@ -1,13 +1,26 @@
 {
   "name": "desktop-info",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "index.js",
   "types": "index.d.ts",
+  "description": "获取桌面显示状态窗口的坐标和大小。",
+  "homepage": "https://github.com/GodCount/desktop-info",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GodCount/desktop-info.git"
+  },
   "napi": {
     "name": "desktop-info",
     "triples": {}
   },
   "license": "MIT",
+  "keywords": [
+    "napi-rs",
+    "winapi",
+    "osascript",
+    "electron",
+    "node"
+  ],
   "devDependencies": {
     "@napi-rs/cli": "^2.13.0",
     "@types/jest": "^29.2.3",
