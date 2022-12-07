@@ -17,7 +17,7 @@
     "node": ">= 10"
   },
   "scripts": {
-    "build": "napi build --platform --release --js ./build/release/index.js --dts ./build/release/index.d.ts && node ./scripts/build.js build",
+    "build": "napi build --platform --release --js false",
     "build:debug": "napi build --platform",
     "test": "jest",
     "version": "napi version"

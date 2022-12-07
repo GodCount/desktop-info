@@ -162,7 +162,7 @@ pub mod desktop {
   $.bind = ObjC.bindFunction.bind($);
   $.bind('CFMakeCollectable', ['id', ['void *']]);
   Ref.prototype._nsObject = function () { return $.unwrap($.CFMakeCollectable(this)); }
-  
+
   function dispose(win) {
       return {
           window_layer: win.kCGWindowLayer,
@@ -183,7 +183,7 @@ pub mod desktop {
           window_alpha: win.kCGWindowAlpha
       }
   }
-  
+
   function enumDesktopWindow(option, relativeToWindow, pid, displayRect) {
       const CGWindowList = $.CGWindowListCopyWindowInfo(option | $.kCGWindowListExcludeDesktopElements, relativeToWindow)._nsObject();
       const windowList = [];
@@ -200,8 +200,7 @@ pub mod desktop {
       windowList.push(...asDesktopWindow);
       return windowList;
   }
-  
-  
+
   function getDisplayRect() {
       const displayMode = $.CGDisplayCopyDisplayMode($.CGMainDisplayID());
       const rect = {
@@ -211,7 +210,7 @@ pub mod desktop {
       $.CGDisplayModeRelease(displayMode);
       return rect;
   }
-  
+
   function main(pid) {
       const cureent = $.CGWindowListCopyWindowInfo($.kCGWindowListOptionAll, 0)._nsObject();
       let relativeToWindow = 0;
@@ -227,7 +226,7 @@ pub mod desktop {
       windowList.push(...enumDesktopWindow($.kCGWindowListOptionOnScreenBelowWindow, relativeToWindow, pid, getDisplayRect()));
       return windowList;
   }
-  
+
   return main($params);
 ";
 
