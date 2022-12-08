@@ -9,7 +9,7 @@ export interface WindowBounds {
   width: number
   height: number
 }
-export function getDesktopWindowInfo(pid: number): DesktopWindowInfo
+export function getDesktopWindowInfo(ppid: number): DesktopWindowInfo
 export type JsDesktopWindowInfo = DesktopWindowInfo
 export class DesktopWindowInfo {
   winRects: Array<WindowBounds>
