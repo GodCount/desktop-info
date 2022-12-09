@@ -1,12 +1,15 @@
-
+use winapi::ctypes::c_void;
+use winapi::shared::ntdef::PWSTR;
 use winapi::shared::windef::{HWND, RECT};
+use winapi::um::dwmapi::{DwmGetWindowAttribute, DWMWA_EXTENDED_FRAME_BOUNDS};
 use winapi::um::winuser::{
-  GetForegroundWindow, GetWindow, GetWindowInfo, IsIconic, IsWindowVisible, WINDOWINFO,
+  GetForegroundWindow, GetWindow, GetWindowTextW, IsIconic, IsWindowVisible,
 };
 
 #[napi(object)]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct WindowBounds {
+  pub title: String,
   pub x: i32,
   pub y: i32,
   pub width: i32,
@@ -14,9 +17,10 @@ pub struct WindowBounds {
 }
 
 impl WindowBounds {
-  fn new(rect: RECT) -> Self {
+  fn new(rect: RECT, title: String) -> Self {
     let (width, height) = (rect.right - rect.left, rect.bottom - rect.top);
     WindowBounds {
+      title,
       x: rect.left,
       y: rect.top,
       width,
@@ -53,31 +57,21 @@ fn enum_window_hierarchy(window: HWND, prev_next: bool, list: &mut Vec<WindowBou
     if window.is_null() {
       return;
     }
-    let mut window_info = WINDOWINFO {
-      cbSize: std::mem::size_of::<WINDOWINFO>() as u32,
-      rcWindow: RECT {
-        left: 0,
-        top: 0,
-        right: 0,
-        bottom: 0,
-      },
-      rcClient: RECT {
-        left: 0,
-        top: 0,
-        right: 0,
-        bottom: 0,
-      },
-      dwStyle: 0,
-      dwExStyle: 0,
-      dwWindowStatus: 0,
-      cxWindowBorders: std::mem::size_of::<WINDOWINFO>() as u32,
-      cyWindowBorders: std::mem::size_of::<WINDOWINFO>() as u32,
-      atomWindowType: 0,
-      wCreatorVersion: 0,
-    };
-    GetWindowInfo(window, &mut window_info);
 
-    let win_rect = WindowBounds::new(window_info.rcWindow);
+    let mut rect: RECT = RECT {
+      left: 0,
+      top: 0,
+      right: 0,
+      bottom: 0,
+    };
+    let rect_ptr: *mut c_void = &mut rect as *mut _ as *mut c_void;
+    DwmGetWindowAttribute(window, DWMWA_EXTENDED_FRAME_BOUNDS, rect_ptr, 16);
+
+    let mut text: [u16; 512] = [0; 512];
+    let len = GetWindowTextW(window, PWSTR::from(text.as_mut_ptr()), text.len() as i32);
+    let text = String::from_utf16_lossy(&text[..len as usize]);
+
+    let win_rect = WindowBounds::new(rect, text);
     if win_rect.width > 5
       && win_rect.height > 5
       && IsWindowVisible(window) != 0
@@ -126,7 +120,7 @@ pub fn get_desktop_window_info(_ppid: i32) -> JsDesktopWindowInfo {
   unsafe {
     let mut list: Vec<WindowBounds> = vec![];
     enum_window_hierarchy(GetWindow(GetForegroundWindow(), 2), false, &mut list);
-    enum_window_hierarchy(GetWindow(GetForegroundWindow(), 3), true, &mut list);
+    // enum_window_hierarchy(GetWindow(GetForegroundWindow(), 3), true, &mut list);
     filter_impurities(&mut list);
     JsDesktopWindowInfo::new(list)
   }
