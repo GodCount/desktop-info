@@ -30,11 +30,15 @@
     "node": ">= 10"
   },
   "scripts": {
-    "install": "node ./install.js",
+    "install": "node install.js",
     "build": "napi build --platform --release --js false",
-    "build:debug": "napi build --platform",
+    "build:debug": "napi build --platform --js false",
     "test": "jest",
     "version": "napi version"
   },
-  "packageManager": "yarn@3.3.0"
+  "packageManager": "yarn@3.3.0",
+  "dependencies": {
+    "nugget": "^2.2.0",
+    "rc": "^1.2.8"
+  }
 }

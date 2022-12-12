@@ -138,7 +138,7 @@ impl JsDesktopWindowInfo {
 
 #[napi]
 pub fn get_desktop_window_info(ppid: i32) -> Result<JsDesktopWindowInfo> {
-  match osascript::JavaScript::new(JAVASCRIPT_CODE).execute_with_params(pid) {
+  match osascript::JavaScript::new(JAVASCRIPT_CODE).execute_with_params(ppid) {
     Ok(window_infos) => Ok(JsDesktopWindowInfo::new(window_infos)),
     Err(err) => Err(Error::new(Status::CallbackScopeMismatch, err.to_string())),
   }
